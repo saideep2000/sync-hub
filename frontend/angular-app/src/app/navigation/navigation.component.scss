@@ -1,0 +1,100 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+
+  .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(21, 83, 94); /* Dark evergreen color */
+  }
+
+  .main-nav {
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin-right: 1rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        a {
+          display: inline-block;
+          padding: 1rem 2rem; /* Increased padding for larger buttons */
+          border-radius: 9999px; /* Full rounded corners */
+          background-color: rgb(234, 255, 153); /* Jonquil background color */
+          color: rgb(21, 83, 94); /* Evergreen text color */
+          font-size: 1rem; /* Larger font size */
+          font-weight: 700; /* Bold font */
+          text-transform: uppercase; /* Uppercase text */
+          letter-spacing: 0.1em; /* Wider letter spacing */
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(.4, 0, .2, 1); /* Smooth transition for all properties */
+
+          &:hover {
+            background-color: rgba(234, 255, 153, 0.8); /* Slightly transparent on hover */
+            transform: scale(1.05); /* Slight scaling effect on hover */
+          }
+
+          &.text-evergreen {
+            color: rgb(21, 83, 94); /* Evergreen text color */
+          }
+        }
+      }
+    }
+  }
+
+  .secondary-nav {
+    .nav-list {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+      height: 50px;
+      background-color: rgb(233, 230, 220); /* Light satin linen background color */
+      border-radius: 9999px;
+      transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
+
+      li {
+        &:first-child a {
+          border-radius: 9999px 0 0 9999px;
+        }
+        &:last-child a {
+          border-radius: 0 9999px 9999px 0;
+        }
+
+        a {
+          display: inline-block;
+          padding: 0.75rem 1.5rem; /* Increased padding for larger buttons */
+          background-color: rgb(233 230 220); /* Jonquil background color */
+          color: rgb(21, 83, 94); /* Evergreen text color */
+          font-size: 1rem; /* Larger font size */
+          font-weight: 700; /* Bold font */
+          text-transform: uppercase; /* Uppercase text */
+          letter-spacing: 0.1em; /* Wider letter spacing */
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(.4, 0, .2, 1); /* Smooth transition for all properties */
+          border-right: none; /* Ensure no borders separate the items */
+          margin-right: -1px; /* Overlap the items slightly to remove gaps */
+
+          &:hover {
+            background-color: rgba(233, 230, 220, 0.8); /* Slightly transparent on hover */
+            transform: scale(1.05); /* Slight scaling effect on hover */
+          }
+
+          &.text-evergreen {
+            color: rgb(21, 83, 94); /* Evergreen text color */
+          }
+        }
+      }
+    }
+  }
+}
