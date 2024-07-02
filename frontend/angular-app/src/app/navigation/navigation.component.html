@@ -1,20 +1,48 @@
-<header class="header">
-  <div class="logo">
+<header class="flex justify-between items-center p-4 bg-transparent">
+  <div class="logo text-3xl font-bold text-[#15535e]">
     <span>Sync Hub</span>
   </div>
   <nav class="main-nav">
-    <ul>
-      <li><a routerLink="/todo">Todo</a></li>
-      <li><a routerLink="/feed">My Feed</a></li>
-      <li><a routerLink="/messages">Messages</a></li>
-      <li><a routerLink="/profile">Profile</a></li>
+    <ul class="flex list-none m-0 p-0">
+      <li class="mr-4">
+        <a routerLink="/todo" class="inline-block px-8 py-4 rounded-full bg-[#eaff99] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          Todo
+        </a>
+      </li>
+      <li class="mr-4">
+        <a routerLink="/feed" class="inline-block px-8 py-4 rounded-full bg-[#eaff99] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          My Feed
+        </a>
+      </li>
+      <li class="mr-4">
+        <a routerLink="/messages" class="inline-block px-8 py-4 rounded-full bg-[#eaff99] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          Messages
+        </a>
+      </li>
+      <li>
+        <a routerLink="/profile" class="inline-block px-8 py-4 rounded-full bg-[#eaff99] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          Profile
+        </a>
+      </li>
     </ul>
   </nav>
   <nav class="secondary-nav">
-    <ul class="nav-list">
-      <li><a routerLink="/about">About</a></li>
-      <li><a routerLink="/contact">Contact</a></li>
-      <li><a routerLink="/account">Account</a></li>
+    <ul class="flex list-none m-0 p-0 items-center h-12 bg-[#e9e6dc] rounded-full overflow-hidden transition-all duration-300">
+      <li class="flex">
+        <a routerLink="/about" class="inline-block px-6 py-4 bg-[#e9e6dc] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          About
+        </a>
+      </li>
+      <li class="flex">
+        <a routerLink="/contact" class="inline-block px-6 py-4 bg-[#e9e6dc] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          Contact
+        </a>
+      </li>
+      <li class="flex">
+        <a routerLink="/account" class="inline-block px-6 py-4 bg-[#e9e6dc] text-[#15535e] text-base font-bold uppercase tracking-widest transition-all duration-300 hover:bg-opacity-80 hover:scale-105">
+          Account
+        </a>
+      </li>
     </ul>
   </nav>
 </header>

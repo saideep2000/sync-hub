@@ -1,9 +1,18 @@
-<app-navigation></app-navigation>
-
-<section class="shapes-section">
-  <div class="shapes-container">
-    <div class="shape-block" style="animation-delay: 0s;"></div>
-    <div class="shape-block" style="animation-delay: 0.2s;"></div>
-    <div class="shape-block" style="animation-delay: 0.4s;"></div>
+<div class="w-full px-0">
+  <div class="mb-4">
+    <app-navigation></app-navigation>
   </div>
-</section>
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-9">
+      <app-timeline></app-timeline>
+    </div>
+    <div class="col-span-12 lg:col-span-3 flex flex-col gap-4">
+      <app-recent-messages class="flex-1"></app-recent-messages>
+      <app-follow class="flex-1"></app-follow>
+    </div>
+  </div>
+  <div class="mt-4">
+    <app-task-info></app-task-info>
+    <app-chatbot class="absolute bottom-11 right-15"></app-chatbot>
+  </div>
+</div>

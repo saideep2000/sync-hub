@@ -52,6 +52,13 @@ npm install --save-dev jest jest-preset-angular @babel/core @babel/preset-env @b
 
 ng generate component Button
 
+ng generate component recent-messages
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init
+
+ng generate component chatbot
+
 ------------------
 
 

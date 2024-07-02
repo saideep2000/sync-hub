@@ -1,1 +1,36 @@
-<p>task-info works!</p>
+<section class="shapes-section bg-[#CBFA40] relative overflow-visible mb-[-64px] pt-10 pb-10 rounded-t-[64px]">
+    <div class="shapes-container max-w-7xl mx-auto flex flex-col items-center justify-center gap-y-[32px] md:grid md:grid-cols-3 md:gap-12 px-4 h-full">
+      <div class="shape-block bg-[#EAFF99] relative w-full max-w-full h-40 rounded-full shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-8px] animate-slide-up-in flex items-center justify-center" style="animation-delay: 0s;">
+        <div class="text-center">
+          <h4 class="text-[#15535E] text-[40px] font-marselis">23</h4>
+          <p class="text-[#15535E] font-cordale">Total tasks</p>
+        </div>
+      </div>
+      <div class="shape-block bg-[#EAFF99] relative w-full max-w-full h-40 rounded-full shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-8px] animate-slide-up-in flex items-center justify-center" style="animation-delay: 0.2s;">
+        <div class="text-center">
+          <h4 class="text-[#15535E] text-[40px] font-marselis">2</h4>
+          <p class="text-[#15535E] font-cordale">Undone</p>
+        </div>
+      </div>
+      <div class="shape-block bg-[#EAFF99] relative w-full max-w-full h-40 rounded-full shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-8px] animate-slide-up-in flex items-center justify-center" style="animation-delay: 0.4s;">
+        <div class="text-center">
+          <h4 class="text-[#15535E] text-[40px] font-marselis">21</h4>
+          <p class="text-[#15535E] font-cordale">Done</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <style>
+    @keyframes slide-up-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  

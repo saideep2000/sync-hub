@@ -1,0 +1,19 @@
+<div class="rounded-xl shadow-lg p-6 bg-[#e9e6dc] flex flex-col h-full min-h-[300px]">
+    <h6 class="text-xl font-bold mb-4 ">Follow</h6>
+    <div *ngIf="followList.length === 0" class="flex-grow flex items-center justify-center text-center text-gray-600">
+      No one to follow
+    </div>
+    <div class="flex-grow">
+      <div *ngFor="let follow of followList" class="flex items-center mb-4 last:mb-0">
+        <img [src]="follow.profilePicture" alt="{{follow.name}}" class="w-12 h-12 rounded-full mr-4">
+        <div class="flex-grow">
+          <p class="font-bold text-[#15535E] ">{{follow.name}}</p>
+          <p class="text-gray-600">{{follow.mutuals}} mutual friends</p>
+        </div>
+        <button class="ml-auto bg-[#15535E] text-white px-4 py-2 rounded-full hover:bg-opacity-80 transition-all duration-300">
+          Follow
+        </button>
+      </div>
+    </div>
+  </div>
+  

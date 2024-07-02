@@ -1,1 +1,16 @@
-<p>recent-messages works!</p>
+<div class="rounded-xl shadow-lg p-6 bg-[#e9e6dc] flex flex-col h-full min-h-[300px]">
+    <h6 class="text-xl font-bold mb-4">Recent Messages</h6>
+    <div *ngIf="messages.length === 0" class="flex-grow flex items-center justify-center text-center text-gray-600">
+      No recent messages
+    </div>
+    <div class="flex-grow">
+      <div *ngFor="let message of messages" class="flex items-center mb-4 last:mb-0">
+        <img [src]="message.profilePicture" alt="{{message.name}}" class="w-12 h-12 rounded-full mr-4">
+        <div>
+          <p class="font-bold text-[#15535E]">{{message.name}}</p>
+          <p class="text-gray-600">{{message.latestMessage}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

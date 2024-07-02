@@ -1,0 +1,23 @@
+<div class="fixed bottom-4 right-4 z-50">
+    <button (click)="toggleChat()" class="bg-[#F8614B] text-white p-4 rounded-full shadow-lg hover:bg-[#0e3b48] transition duration-300">
+      <p>Chat</p>
+    </button>
+    <div *ngIf="chatOpen" class="chat-window fixed bottom-16 right-4 bg-white rounded-lg shadow-lg w-80 h-96 p-4 flex flex-col">
+      <div class="flex justify-between items-center border-b pb-2 mb-2">
+        <h2 class="text-lg font-bold text-[#15535E]">Sync Bot</h2>
+        <button (click)="toggleChat()" class="text-gray-600 hover:text-gray-800">&times;</button>
+      </div>
+      <div class="flex-grow overflow-y-auto mb-4">
+        <div *ngFor="let message of messages" class="mb-2">
+          <div class="text-sm p-2 rounded-md" [ngClass]="{'bg-blue-100 text-right': message.user, 'bg-gray-100 text-left': !message.user}">
+            {{ message.text }}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center border-t pt-2">
+        <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" type="text" class="flex-grow p-2 border rounded-md" placeholder="Type a message...">
+        <button (click)="sendMessage()" class="bg-[#15535E] text-white p-2 ml-2 rounded-md hover:bg-[#0e3b48] transition duration-300">Send</button>
+      </div>
+    </div>
+  </div>
+  

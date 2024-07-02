@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// @layer utilities {
+//   .bg-lime {
+//     --tw-bg-opacity: 1;
+//     background-color: rgb(203 250 64 / var(--tw-bg-opacity));
+//   }
+
+//   .rounded-t-block-corner {
+//     border-top-left-radius: clamp(32px, calc(20.732394366197184px + 3.004694835680751vw), 64px);
+//     border-top-right-radius: clamp(32px, calc(20.732394366197184px + 3.004694835680751vw), 64px);
+//   }
+
+//   .mb-negative-block-corner {
+//     margin-bottom: calc(clamp(32px, calc(20.732394366197184px + 3.004694835680751vw), 64px) * -1);
+//   }
+
+//   .pt-75 {
+//     padding-top: 75%; /* 4:3 Aspect Ratio */
+//   }
+
+//   .gap-y-gutter {
+//     gap: clamp(22.4px, calc(19.019718309859154px + 0.9014084507042254vw), 32px);
+//   }
+
+//   .px-gutter {
+//     padding-left: clamp(20px, calc(12.95774647887324px + 1.8779342723004695vw), 40px);
+//     padding-right: clamp(20px, calc(12.95774647887324px + 1.8779342723004695vw), 40px);
+//   }
+
+//   .animate-slide-up-in {
+//     animation: slide-up-in 0.5s ease forwards;
+//   }
+
+//   .translate-y-neg-2 {
+//     transform: translateY(-0.5rem); /* Use Tailwind's spacing scale for better readability */
+//   }
+
+//   .max-w-6xl {
+//     max-width: 6xl; /* Use Tailwind's predefined max-width classes */
+//   }
+
+//   .max-w-md {
+//     max-width: 28rem; /* Use Tailwind's predefined max-width classes for medium size */
+//   }
+// }
+
+// @keyframes slide-up-in {
+//   from {
+//     opacity: 0;
+//     transform: translateY(20px);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// }
