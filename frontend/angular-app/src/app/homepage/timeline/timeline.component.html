@@ -6,7 +6,7 @@
     <div #timelineWrapper class="timeline-wrapper relative overflow-hidden w-full h-80">
       <div class="timeline relative flex h-full bg-gray-300 rounded-lg">
         <div *ngFor="let segment of segments" 
-             class="time-segment flex flex-col items-center justify-center w-full border-l border-gray-500"
+             class="time-segment flex flex-col items-center w-full border-l border-gray-500"
              style="flex: 1 0 auto;">
           <p class="text-sm">{{ segment.time }}</p>
           <p class="text-xs text-gray-600">{{ segment.date }}</p>
@@ -35,7 +35,8 @@
 
     .time-segment {
     flex: 1 0 auto; /* If using flexbox, this sets the basis auto and grow as 1 */
-    width: calc(150% / 10); /* Example of setting width directly */
+    /* width: 165px; */
+    width: calc(173% / 8);
     }
 
 

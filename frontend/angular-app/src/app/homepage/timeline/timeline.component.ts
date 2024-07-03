@@ -17,6 +17,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   currentTime: string = '';
   currentDate: string = '';
   segments: Segment[] = [];
+  flag : number = 0;
   @ViewChild('timelineWrapper', { static: false }) timelineWrapper!: ElementRef<HTMLDivElement>;
 
   private startX: number = 0;
@@ -59,7 +60,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     currentDate.setSeconds(0);
     currentDate.setMilliseconds(0);
     currentDate.setHours(currentDate.getHours() - 1); // Start 1 hour before
-    for (let i = 0; i < 10; i++) { // Generate 6 segments for 3 hours
+    for (let i = 0; i < 8; i++) { // Generate 6 segments for 3 hours
       this.addSegment(currentDate);
       currentDate.setMinutes(currentDate.getMinutes() + 30);
     }
@@ -74,7 +75,8 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   }
 
   scrollToCurrentTime() {
-    const segmentWidth = this.timelineWrapper.nativeElement.offsetWidth / 6;
+    const segmentWidth = this.timelineWrapper.nativeElement.offsetWidth / 8;
+    console.log(`Segment Width: ${segmentWidth}`);
     this.timelineWrapper.nativeElement.scrollLeft = segmentWidth * 2; // Center on the current hour
   }
 
@@ -83,15 +85,62 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     const position = target.scrollLeft;
     const maxScrollLeft = target.scrollWidth - target.clientWidth;
 
+    // console.log(position)
+    // console.log(" ")
+    // console.log(maxScrollLeft)
+
     if (position > maxScrollLeft - 100) { // Check if close to the end
-      const lastDate = new Date(this.segments[this.segments.length - 1].date + ' ' + this.segments[this.segments.length - 1].time);
-      lastDate.setMinutes(lastDate.getMinutes() + 30); // Start from next half hour
-      for (let i = 0; i < 10; i++) { // Append next 3 hours of segments
-        this.addSegment(lastDate);
-        lastDate.setMinutes(lastDate.getMinutes() + 30);
-      }
+      this.appendSegments();
+    }
+
+    console.log(position);
+    console.log(" ");
+    console.log(maxScrollLeft);
+
+    if(position < 10 && !this.flag){
+      this.prependSegments();
+      this.flag = 1;
+    }
+
+    // if (position < maxScrollLeft * 0.1 && !this.flag) {  // Adjust the multiplier based on sensitivity needed
+    //   this.prependSegments();
+    //   this.flag = 1;  // Set flag to prevent re-triggering
+    // } 
+    // else if (position > maxScrollLeft * 0.2) {  // Reset flag when scrolled away from the edge
+    //   this.flag = 0;
+    // }
+  }
+
+  appendSegments(){
+    const lastDate = new Date(this.segments[this.segments.length - 1].date + ' ' + this.segments[this.segments.length - 1].time);
+    lastDate.setMinutes(lastDate.getMinutes() + 30); // Start from next half hour
+    for (let i = 0; i < 8; i++) { // Append next 3 hours of segments
+      this.addSegment(lastDate);
+      lastDate.setMinutes(lastDate.getMinutes() + 30);
     }
   }
+
+  prependSegments(){
+    const firstDate = new Date(this.segments[0].date + ' ' + this.segments[0].time);
+    firstDate.setMinutes(firstDate.getMinutes() - 30); // Go back half hour for each new segment
+    const newSegments: Segment[] = [];
+    for (let i = 0; i < 8; i++) {
+      const time = `${firstDate.getHours().toString().padStart(2, '0')}:${firstDate.getMinutes().toString().padStart(2, '0')}`;
+      const dateStr = firstDate.toDateString();
+      newSegments.unshift({ time, date: dateStr }); 
+      firstDate.setMinutes(firstDate.getMinutes() - 30);
+    }
+    // console.log(newSegments)
+    this.segments = [...newSegments, ...this.segments];
+    this.updateScrollPositionForPrepend(newSegments.length);
+  }
+
+  updateScrollPositionForPrepend(numNewSegments: number) {
+    const segmentWidth = this.timelineWrapper.nativeElement.offsetWidth / 8; // Replace 8 with your actual visible segments if different
+    this.timelineWrapper.nativeElement.scrollLeft += segmentWidth * numNewSegments;
+  }
+  
+  
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(e: MouseEvent) {
