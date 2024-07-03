@@ -1,1 +1,43 @@
-<p>timeline works!</p>
+<div class="timeline-container p-4 bg-gray-100 rounded-lg shadow-md">
+    <div class="header flex justify-between mb-4">
+      <p class="text-lg font-bold">Current Time: {{ currentTime }}</p>
+      <p class="text-lg font-bold">Current Date: {{ currentDate }}</p>
+    </div>
+    <div #timelineWrapper class="timeline-wrapper relative overflow-hidden w-full h-80">
+      <div class="timeline relative flex h-full bg-gray-300 rounded-lg">
+        <div *ngFor="let segment of segments" 
+             class="time-segment flex flex-col items-center justify-center w-full border-l border-gray-500"
+             style="flex: 1 0 auto;">
+          <p class="text-sm">{{ segment.time }}</p>
+          <p class="text-xs text-gray-600">{{ segment.date }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <style>
+    .timeline-container {
+    user-select: none; /* Prevent text selection while dragging */
+    }
+
+    .timeline-wrapper {
+    overflow: hidden;
+    cursor: grab; /* Change cursor to indicate dragging is possible */
+    width: 100%; /* Ensure full width */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    }
+
+    .timeline-wrapper.active {
+    cursor: grabbing; /* Change cursor to indicate dragging */
+    }
+
+    .time-segment {
+    flex: 1 0 auto; /* If using flexbox, this sets the basis auto and grow as 1 */
+    width: calc(150% / 10); /* Example of setting width directly */
+    }
+
+
+  </style>
+  
