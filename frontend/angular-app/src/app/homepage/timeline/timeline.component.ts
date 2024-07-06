@@ -1,9 +1,23 @@
-import { Component, OnInit, Inject, PLATFORM_ID, AfterViewInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+
+interface Task {
+  title: string;
+  startTime: Date;
+  endTime: Date;
+  place: string;
+  peopleInvolved: string[];
+  description: string;
+  tags: string[];
+  flag: boolean;
+  status: 'Not Done' | 'Done';
+}
 
 interface Segment {
   time: string;
   date: string;
+  fullDateTime: Date;
+  tasks: Task[];
 }
 
 @Component({
@@ -16,155 +30,145 @@ interface Segment {
 export class TimelineComponent implements OnInit, AfterViewInit {
   currentTime: string = '';
   currentDate: string = '';
+  displayDate: Date = new Date();
   segments: Segment[] = [];
-  flag : number = 0;
   @ViewChild('timelineWrapper', { static: false }) timelineWrapper!: ElementRef<HTMLDivElement>;
-
-  private startX: number = 0;
-  private scrollLeft: number = 0;
-  private isDown: boolean = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: any) {}
 
   ngOnInit() {
     this.updateCurrentTime();
+    this.generateInitialSegments();
     if (isPlatformBrowser(this.platformId)) {
       setInterval(() => this.updateCurrentTime(), 6000);
     }
-    this.generateInitialSegments();
   }
 
   ngAfterViewInit() {
-    this.scrollToCurrentTime();
-    // Properly attach the scroll event to the timelineWrapper element
-    this.timelineWrapper.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+    setTimeout(() => this.scrollToCurrentTime(), 0); // Scroll to the current time on initial load
   }
 
   updateCurrentTime() {
     const now = new Date();
-    const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5);
-    const formattedDate = now.toDateString();
-
-    this.currentTime = formattedTime;
-    this.currentDate = formattedDate;
+    this.currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
+    this.currentDate = now.toDateString();
   }
 
   generateInitialSegments() {
-    const currentDate = new Date();
-    if (currentDate.getMinutes() >= 30){
-      currentDate.setMinutes(30)
-    }
-    else{
-      currentDate.setMinutes(0)
-    }
-    currentDate.setSeconds(0);
-    currentDate.setMilliseconds(0);
-    currentDate.setHours(currentDate.getHours() - 1); // Start 1 hour before
-    for (let i = 0; i < 8; i++) { // Generate 6 segments for 3 hours
-      this.addSegment(currentDate);
-      currentDate.setMinutes(currentDate.getMinutes() + 30);
+    this.generateSegmentsForDate(this.displayDate);
+  }
+
+  generateSegmentsForDate(date: Date) {
+    this.segments = []; // Clear existing segments
+    const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(startOfDay);
+    endOfDay.setDate(endOfDay.getDate() + 1);
+
+    for (let d = new Date(startOfDay); d < endOfDay; d.setMinutes(d.getMinutes() + 30)) {
+      this.addSegment(new Date(d));
     }
   }
 
   addSegment(date: Date) {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    const segmentDate = date.toDateString();
-    this.segments.push({ time, date: segmentDate });
+    const tasks = this.addDummyTasks();
+    this.segments.push({
+      time: `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`,
+      date: date.toDateString(),
+      fullDateTime: new Date(date),
+      tasks: tasks.filter(task => task.startTime >= date && task.endTime < new Date(date.getTime() + 30 * 60000))
+    });
+  }
+
+  addDummyTasks(): Task[] {
+    const today = new Date();
+    return [
+      {
+        title: 'Team Meeting',
+        startTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 30),
+        endTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 30),
+        place: 'Conference Room A',
+        peopleInvolved: ['Alice', 'Bob'],
+        description: 'Discuss project milestones.',
+        tags: ['meeting', 'urgent'],
+        flag: true,
+        status: 'Not Done'
+      },
+      {
+        title: 'Client Call',
+        startTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 0),
+        endTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 11, 0),
+        place: 'Office',
+        peopleInvolved: ['Client X'],
+        description: 'Review contract details.',
+        tags: ['call', 'client'],
+        flag: false,
+        status: 'Done'
+      },
+      {
+        title: 'Lunch Break',
+        startTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0),
+        endTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 0),
+        place: 'Cafeteria',
+        peopleInvolved: ['Team'],
+        description: 'Team lunch.',
+        tags: ['break'],
+        flag: false,
+        status: 'Not Done'
+      },
+      {
+        title: 'Webinar',
+        startTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 11, 30),
+        endTime: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 30),
+        place: 'Online',
+        peopleInvolved: ['Alice', 'Bob', 'Client X'],
+        description: 'Attend online marketing webinar.',
+        tags: ['training'],
+        flag: true,
+        status: 'Not Done'
+      }
+    ];
+  }
+
+  scrollToPrevious() {
+    this.displayDate.setDate(this.displayDate.getDate() - 1);
+    this.generateSegmentsForDate(this.displayDate);
+    this.scrollToDate(this.displayDate);
+  }
+
+  scrollToToday() {
+    this.displayDate = new Date(); // Reset to current date
+    this.generateSegmentsForDate(this.displayDate);
+    this.scrollToCurrentTime();
+  }
+
+  scrollToNext() {
+    this.displayDate.setDate(this.displayDate.getDate() + 1);
+    this.generateSegmentsForDate(this.displayDate);
+    this.scrollToDate(this.displayDate);
   }
 
   scrollToCurrentTime() {
-    const segmentWidth = this.timelineWrapper.nativeElement.offsetWidth / 8;
-    console.log(`Segment Width: ${segmentWidth}`);
-    this.timelineWrapper.nativeElement.scrollLeft = segmentWidth * 2; // Center on the current hour
-  }
-
-  onScroll(event: Event) {
-    const target = event.target as Element;
-    const position = target.scrollLeft;
-    const maxScrollLeft = target.scrollWidth - target.clientWidth;
-
-    // console.log(position)
-    // console.log(" ")
-    // console.log(maxScrollLeft)
-
-    if (position > maxScrollLeft - 100) { // Check if close to the end
-      this.appendSegments();
-    }
-
-    console.log(position);
-    console.log(" ");
-    console.log(maxScrollLeft);
-
-    if(position < 10 && !this.flag){
-      this.prependSegments();
-      this.flag = 1;
-    }
-
-    // if (position < maxScrollLeft * 0.1 && !this.flag) {  // Adjust the multiplier based on sensitivity needed
-    //   this.prependSegments();
-    //   this.flag = 1;  // Set flag to prevent re-triggering
-    // } 
-    // else if (position > maxScrollLeft * 0.2) {  // Reset flag when scrolled away from the edge
-    //   this.flag = 0;
-    // }
-  }
-
-  appendSegments(){
-    const lastDate = new Date(this.segments[this.segments.length - 1].date + ' ' + this.segments[this.segments.length - 1].time);
-    lastDate.setMinutes(lastDate.getMinutes() + 30); // Start from next half hour
-    for (let i = 0; i < 8; i++) { // Append next 3 hours of segments
-      this.addSegment(lastDate);
-      lastDate.setMinutes(lastDate.getMinutes() + 30);
+    const now = new Date();
+    const currentTimeIndex = this.segments.findIndex(seg =>
+      seg.fullDateTime.getHours() === now.getHours() && seg.fullDateTime.getMinutes() <= now.getMinutes() && now.getMinutes() < seg.fullDateTime.getMinutes() + 30
+    );
+    if (currentTimeIndex !== -1) {
+      this.scrollSegmentToView(currentTimeIndex);
     }
   }
 
-  prependSegments(){
-    const firstDate = new Date(this.segments[0].date + ' ' + this.segments[0].time);
-    firstDate.setMinutes(firstDate.getMinutes() - 30); // Go back half hour for each new segment
-    const newSegments: Segment[] = [];
-    for (let i = 0; i < 8; i++) {
-      const time = `${firstDate.getHours().toString().padStart(2, '0')}:${firstDate.getMinutes().toString().padStart(2, '0')}`;
-      const dateStr = firstDate.toDateString();
-      newSegments.unshift({ time, date: dateStr }); 
-      firstDate.setMinutes(firstDate.getMinutes() - 30);
+  scrollToDate(date: Date) {
+    const dayStartIndex = this.segments.findIndex(seg => seg.date === date.toDateString());
+    this.scrollSegmentToView(dayStartIndex);
+  }
+
+  scrollSegmentToView(index: number) {
+    const segmentWidth = this.timelineWrapper.nativeElement.querySelector('.time-segment')?.clientWidth;
+    if (segmentWidth) {
+      this.timelineWrapper.nativeElement.scrollTo({
+        left: segmentWidth * index,
+        behavior: 'smooth'
+      });
     }
-    // console.log(newSegments)
-    this.segments = [...newSegments, ...this.segments];
-    this.updateScrollPositionForPrepend(newSegments.length);
-  }
-
-  updateScrollPositionForPrepend(numNewSegments: number) {
-    const segmentWidth = this.timelineWrapper.nativeElement.offsetWidth / 8; // Replace 8 with your actual visible segments if different
-    this.timelineWrapper.nativeElement.scrollLeft += segmentWidth * numNewSegments;
-  }
-  
-  
-
-  @HostListener('mousedown', ['$event'])
-  onMouseDown(e: MouseEvent) {
-    e.preventDefault();
-    this.isDown = true;
-    this.timelineWrapper.nativeElement.classList.add('active');
-    this.startX = e.pageX;
-    this.scrollLeft = this.timelineWrapper.nativeElement.scrollLeft;
-  }
-
-  @HostListener('document:mouseup', ['$event'])
-  onMouseUp(e: MouseEvent) {
-    if (this.isDown) {
-      this.isDown = false;
-      this.timelineWrapper.nativeElement.classList.remove('active');
-    }
-  }
-
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(e: MouseEvent) {
-    if (!this.isDown) return;
-    e.preventDefault();
-    const x = e.pageX;
-    const walk = (x - this.startX) * 2; // Scroll faster
-    this.timelineWrapper.nativeElement.scrollLeft = this.scrollLeft - walk;
   }
 }

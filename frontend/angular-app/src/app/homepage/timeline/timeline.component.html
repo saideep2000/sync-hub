@@ -1,44 +1,39 @@
 <div class="timeline-container p-4 bg-gray-100 rounded-lg shadow-md">
-    <div class="header flex justify-between mb-4">
-      <p class="text-lg font-bold">Current Time: {{ currentTime }}</p>
-      <p class="text-lg font-bold">Current Date: {{ currentDate }}</p>
+  <div class="header flex justify-between items-center mb-4">
+    <p class="text-lg font-bold">Current Time: {{ currentTime }}</p>
+    <p class="text-lg font-bold">Current Date: {{ currentDate }}</p>
+    <div class="navigation-controls flex">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50"
+              (click)="scrollToPrevious()" aria-label="Scroll to previous segments">
+        &lt;
+      </button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"
+              (click)="scrollToToday()" aria-label="Scroll to today's segments">
+        Today
+      </button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r"
+              (click)="scrollToNext()" aria-label="Scroll to next segments">
+        &gt;
+      </button>
     </div>
-    <div #timelineWrapper class="timeline-wrapper relative overflow-hidden w-full h-80">
-      <div class="timeline relative flex h-full bg-gray-300 rounded-lg">
-        <div *ngFor="let segment of segments" 
-             class="time-segment flex flex-col items-center w-full border-l border-gray-500"
-             style="flex: 1 0 auto;">
-          <p class="text-sm">{{ segment.time }}</p>
-          <p class="text-xs text-gray-600">{{ segment.date }}</p>
+  </div>
+  <div #timelineWrapper class="timeline-wrapper relative overflow-x-auto overflow-y-hidden w-full h-96">
+    <div class="timeline relative flex h-full rounded-lg">
+      <div *ngFor="let segment of segments" 
+           class="time-segment flex flex-col items-center w-full border-l border-gray-500"
+           style="flex: none; width: calc(100% / 8);">
+        <p class="text-sm">{{ segment.time }}</p>
+        <p class="text-xs text-gray-600">{{ segment.date }}</p>
+        <div *ngFor="let task of segment.tasks"
+            class="task-info absolute bg-blue-300 rounded p-1 text-white"
+            [style.top]="calculateTaskPosition(segment.tasks, task, segment.fullDateTime)"
+            [style.height]="calculateTaskHeight(task)"
+            style="left: 0; right: 0;"
+            [attr.title]="formatTaskDetails(task)">
+          {{ task.title }} ({{ task.startTime | date:'shortTime' }} - {{ task.endTime | date:'shortTime' }})
         </div>
+
       </div>
     </div>
   </div>
-  
-  
-  <style>
-    .timeline-container {
-    user-select: none; /* Prevent text selection while dragging */
-    }
-
-    .timeline-wrapper {
-    overflow: hidden;
-    cursor: grab; /* Change cursor to indicate dragging is possible */
-    width: 100%; /* Ensure full width */
-    display: flex;
-    align-items: center; /* Center content vertically */
-    }
-
-    .timeline-wrapper.active {
-    cursor: grabbing; /* Change cursor to indicate dragging */
-    }
-
-    .time-segment {
-    flex: 1 0 auto; /* If using flexbox, this sets the basis auto and grow as 1 */
-    /* width: 165px; */
-    width: calc(173% / 8);
-    }
-
-
-  </style>
-  
+</div>
